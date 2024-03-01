@@ -9,11 +9,16 @@ const guestNav = [
 
 const userNav = [
   { to: "/", text: "หน้าหลัก" },
+  { to: "/UserBooking", text: "สั่งคิวจองตัดผม" },
+  { to: "/StatusUser", text: "สถานะการจอง" },
+  
 
 ];
 const adminNav =
   [
-    { to: "*", text: "หน้าหลัก" },
+    { to: "/DataUser", text: "ข้อมูลผู้ใช้งาน" },
+    { to: "/DataBooking", text: "ข้อมูลการจอง" },
+    { to: "/DataHairStyle", text: "ข้อมูลทรงผม" },
 
 
   ];
@@ -30,22 +35,12 @@ export default function Header() {
     navigate('/')
   }
 
-
-  const hdlHome = () => {
-    navigate('/')
-  }
-
   return (
-    <div className="navbar bg-gradient-to-r from-[#92CEA8] to-[#FEC7BB]">
+    <div className="navbar bg-gradient-to-r from-[#FF0033] to-[#0033CC]">
       <div className="flex-1">
         <a className="btn btn-ghost text-xl text-white">
           BABRSHOP
-        </a>
-        {/* สวัสดี, {user?.user_id ? user.username : 'Guest'} */}
-        <ul className="menu mx-auto menu-horizontal text-white  ">
-          <li><a onClick={hdlHome}>ข้อมูลผู้ใช้</a></li>
-          <li><a>Item 2</a></li>
-        </ul>
+        </a> 
       </div>
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1">

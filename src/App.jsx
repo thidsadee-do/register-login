@@ -1,6 +1,4 @@
 import userAuth from "./hooks/userAuth";
-import LoginForm from "./layout/LoginForm";
-import RegisterForm from "./layout/RegisterForm";
 import AppRouter from "./routes/AppRouter";
 
 function App() {

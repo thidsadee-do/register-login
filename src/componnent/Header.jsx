@@ -2,8 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import useAuth from '../hooks/userAuth'
 
 const guestNav = [
-
-  { to: '/', text: 'เข้าสู่ระบบ' },
+  { to: '/LoginForm', text: 'เข้าสู่ระบบ' },
   { to: '/register', text: 'สมัครสมาชิก' },
 ]
 
@@ -11,6 +10,7 @@ const userNav = [
   { to: "/", text: "หน้าหลัก" },
   { to: "/UserBooking", text: "สั่งคิวจองตัดผม" },
   { to: "/StatusUser", text: "สถานะการจอง" },
+  { to: "/AboutMe", text: "ติดต่อเรา" },
   
 
 ];

@@ -10,6 +10,7 @@ import DataHairStyle from "../componnent/DataStyleHair";
 import UserBooking from "../componnent/UserBooking";
 import StatusUser from "../componnent/StatusUser";
 import CreateStylehair from "../componnent/CreateStylehair";
+import AboutMe from "../componnent/AboutMe";
 
 
 const guesRouter = createBrowserRouter([
@@ -17,19 +18,21 @@ const guesRouter = createBrowserRouter([
     path: "/",
     element: (
       <>
+        <Header />
         <Outlet />
       </>
     ),
     children: [
-      { index: true, element: <LoginForm /> }, 
+      { index: true, element: <UserHome /> },
+      { path: "/LoginForm", element: <LoginForm /> },
       { path: "/register", element: <RegisterForm /> },
-      { path: "/DataUser", element: <DataUser /> }, 
-      { path: "/DataBooking", element: <DataBooking/> },
-      { path: "/DataHairStyle", element: <DataHairStyle/> },
-      { path: "/UserBooking/*", element: <UserBooking/> },
-      { path: "/StatusUser", element: <StatusUser/> },
-      { path: "/CreateStylehair", element: <CreateStylehair/> },
-      { path: "*", element: <p>Administrator</p> },
+      { path: "/DataUser", element: <DataUser /> },
+      { path: "/DataBooking", element: <DataBooking /> },
+      { path: "/DataHairStyle", element: <DataHairStyle /> },
+      { path: "/UserBooking/*", element: <UserBooking /> },
+      { path: "/StatusUser", element: <StatusUser /> },
+      { path: "/CreateStylehair", element: <CreateStylehair /> },
+      { path: "*", element: <p>USER</p> },
     ],
   },
 ]);
@@ -44,11 +47,12 @@ const userRouter = createBrowserRouter([
       </>
     ),
     children: [
-      { index: true, element: <UserHome /> }, 
+      { index: true, element: <UserHome /> },
       { path: "/register", element: <RegisterForm /> },
-      { path: "/UserBooking/*", element: <UserBooking/> },
-      { path: "/StatusUser", element: <StatusUser/> },
-      { path: "*", element: <p>Administrator</p> },
+      { path: "/UserBooking/*", element: <UserBooking /> },
+      { path: "/StatusUser", element: <StatusUser /> },
+      { path: "/AboutMe", element: <AboutMe /> },
+      // { path: "*", element: <p>User</p> },
     ],
   },
 ]);
@@ -63,11 +67,11 @@ const adminRouter = createBrowserRouter([
       </>
     ),
     children: [
-      { index: true, element: <DataUser /> }, 
-      { path: "/DataUser", element: <DataUser /> }, 
-      { path: "/DataBooking", element: <DataBooking/> },
-      { path: "/DataHairStyle", element: <DataHairStyle/> },
-      { path: "/CreateStylehair", element: <CreateStylehair/> },
+      { index: true, element: <DataUser /> },
+      { path: "/DataUser", element: <DataUser /> },
+      { path: "/DataBooking", element: <DataBooking /> },
+      { path: "/DataHairStyle", element: <DataHairStyle /> },
+      { path: "/CreateStylehair", element: <CreateStylehair /> },
       { path: "*", element: <p className=" text-center text-rose-600 text-2xl">Administrator</p> },
     ],
   },
@@ -81,4 +85,3 @@ export default function AppRouter() {
   const finalRouter = user?.user_id ? user.user_role === "ADMIN" ? adminRouter : userRouter : guesRouter;
   return <RouterProvider router={finalRouter} />;
 }
-    

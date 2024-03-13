@@ -27,6 +27,7 @@ export default function LoginForm() {
       if (rs1.data.user_role === 'ADMIN') {
         navagate('/admin')
       }
+      navagate('/')
 
       console.log(rs1.data);
       setUser(rs1.data);
@@ -49,8 +50,11 @@ export default function LoginForm() {
                 style={{ width: "55px", height: "50px" }}
               />
             </div>
-            <h1 className="text-2xl font-bold text-center text-" >
+            <h1 className="text-2xl font-bold text-center text-" onClick={() => navagate('/LoginForm')}>
               เข้าสู่ระบบ
+              <h2 className="text ">
+                ร้านBarbershop
+              </h2>
             </h1>
             <div className="form-control">
               <label className="label">

@@ -23,7 +23,7 @@ export default function CreateStylehair() {
 
     const hdlCreateStylehair = (e) => {
         e.preventDefault()
-        // alert(555)
+        // alert(จองเรียบร้อย)
         const create = () => {
             try {
                 axios.post('http://localhost:8889/admin/createhairstyle', createStylehair)

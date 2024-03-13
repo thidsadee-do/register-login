@@ -122,7 +122,15 @@ const Modal = ({ hairstyle }) => {
             ...prevData,
             [e.target.name]: e.target.value,
         }));
+
+       
     };
+    const hdlback = (id) => {
+        if (isEditing) {
+            setEditData(!isEditing)
+        }
+        document.getElementById(id).close()
+    }
     return (
         <dialog id={modalId} className="modal">
             {console.log(modalId)}
@@ -133,6 +141,7 @@ const Modal = ({ hairstyle }) => {
                 <h3 className="text-lg mb-5">ชื่อทรงผม : {isEditing ? <input type="text" name="hairstyle_name" value={editData.hairstyle_name} onChange={handleChange}></input> : hairstyle.hairstyle_name}</h3>
                 <h3 className="text-lg mb-5">ราคา : {isEditing ? <input type="text" name="hairstyle_price" value={editData.hairstyle_price} onChange={handleChange}></input> : hairstyle.hairstyle_price}</h3>
                 <h3 className="text-lg mb-5 w-50">ภาพเป็นลิ้ง : {isEditing ? <input type="text" name="hairstyle_img" value={editData.hairstyle_img} onChange={handleChange}></input> : hairstyle.hairstyle_img}</h3>
+                
                 {/* <h3 className="text-lg mb-5">
                     ประเภท : {isEditing ? (
                         <select name="type_name" value={editData.type_name} onChange={handleChange}>
@@ -150,6 +159,8 @@ const Modal = ({ hairstyle }) => {
                     ) : (
                         <button className=" btn btn-warning" onClick={handleEditCilck}>แก้ไข</button>
                     )}
+                    <button type="button" className="flex justify-start btn btn-error" onClick={ () => hdlback(modalId)}>ย้อนกลับ</button>
+                    
                 </div>
             </div>
             <form method="dialog" className="modal-backdrop">

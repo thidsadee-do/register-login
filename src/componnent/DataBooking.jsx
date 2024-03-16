@@ -49,9 +49,9 @@ export default function DataBooking() {
                         <tr className="text-xs font-medium text-red-700">
                             <th>ลำดับการจอง</th>
                             <th>วันเวลาที่จอง</th>
-                            <th>ชื่อผู้จอง</th>
-                            <th>อายุผู้จอง</th>
-                            <th>ทรงผม</th>
+                            <th>ชื่อผู้ตัด</th>
+                            <th>อายุผู้ตัด</th>
+                            <th>ทรงผมที่จะตัด</th>
                             <th>สถานะ</th>
                         </tr>
                     </thead>

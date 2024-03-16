@@ -41,7 +41,7 @@ export default function StatusUser() {
         <table className="table">
           {/* head */}
           <thead>
-            <tr>
+            <tr className="bg-gradient-to-r from-[#FF0033] to-[#0033CC] mt-5 w-36 text-white ">
               <th>ชื่อผู้จอง</th>
               <th>ชื่อผู้ตัดผม</th>
               <th>อายุ</th>

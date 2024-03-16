@@ -19,6 +19,7 @@ const adminNav =
     { to: "/DataUser", text: "ข้อมูลผู้ใช้งาน" },
     { to: "/DataBooking", text: "ข้อมูลการจอง" },
     { to: "/DataHairStyle", text: "ข้อมูลทรงผม" },
+    { to: "/Datadashboard", text: "Dashboard" },
 
 
   ];

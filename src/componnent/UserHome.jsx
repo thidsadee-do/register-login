@@ -42,14 +42,14 @@ function UserHomeItem({ item }) {
 
   return (
     <div>
-      <div className="card-body items-center text-center ">
+      <div className="card-body items-center text-center  ">
         <div className="">
-          <div className="card w-80 h-150 bg-base-100 shadow-xl">
+          <div className="card w-80 h-150 bg-base-100 shadow-xl bg-gradient-to-r from-[#FF0033] to-[#0033CC] ">
             <figure className="bg-clip-border">
               <img src={item.hairstyle_img} alt="" />
             </figure>
-            <h3 className="text-xl font-bold">{item.hairstyle_name}</h3>
-            <p className="product-price">ราคา : {item.hairstyle_price} บาท</p>
+            <h3 className="text-xl font-bold text-white">{item.hairstyle_name}</h3>
+            <p className="product-price text-white">ราคา : {item.hairstyle_price} บาท</p>
             <div className="card-actions mx-auto px-5 text-center w-60" >
               <p onClick={hdlUserbooking} className="btn bg-gradient-to-r from-[#fdba74] to-[#ea580c] mb-2">จองคิว</p>
             </div>
@@ -57,6 +57,7 @@ function UserHomeItem({ item }) {
         </div>
       </div>
     </div>
+    
   )
 };
 

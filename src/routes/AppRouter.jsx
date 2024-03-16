@@ -11,6 +11,8 @@ import UserBooking from "../componnent/UserBooking";
 import StatusUser from "../componnent/StatusUser";
 import CreateStylehair from "../componnent/CreateStylehair";
 import AboutMe from "../componnent/AboutMe";
+import Datadashboard from "../componnent/Datadashboard"
+
 
 
 const guesRouter = createBrowserRouter([
@@ -72,6 +74,7 @@ const adminRouter = createBrowserRouter([
       { path: "/DataBooking", element: <DataBooking /> },
       { path: "/DataHairStyle", element: <DataHairStyle /> },
       { path: "/CreateStylehair", element: <CreateStylehair /> },
+      { path: "/Datadashboard", element: <Datadashboard /> },
       { path: "*", element: <p className=" text-center text-rose-600 text-2xl">Administrator</p> },
     ],
   },

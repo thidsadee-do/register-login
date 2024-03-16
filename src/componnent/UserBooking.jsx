@@ -78,13 +78,15 @@ export default function Userbooking() {
       <div className="divider divider-warning">เลือกทรงผมและสั่งจองคิว</div>
       <div className="hero min-h-screen bg-base-200">
         <div className="hero-content flex-col lg:flex-row-reverse">
-          <div className="text-center lg:text-left">
-            <h1 className="text-5xl font-bold">"ขอบคุณที่ให้โอกาสเราให้บริการคุณ!"</h1>
-            <p className="py-6">"สวัสดีครับ! ยินดีต้อนรับสู่ BarberShop เรามุ่งมั่นที่จะให้บริการท่านด้วยความสะดวกสบายและคุณภาพ" </p>
+          <div className="text-center lg:text-left mb-60 ">
+            <h1 className="text-5xl text-white font-bold bg-gradient-to-r from-[#FF0033] to-[#0033CC] rounded-lg">OPENING HOURS</h1>
+            <h1 className="text-4xl text-white font-bold bg-gradient-to-r from-[#0033CC] to-[#FF0033] rounded-t">Saturday: 10:00 - 19:00</h1>
+            <h1 className="text-4xl text-white font-bold bg-gradient-to-r from-[#0033CC] to-[#FF0033] ">Sunday: 10:00 - 19:00</h1> 
+            <p className="py-6 text-white bg-gradient-to-r from-[#FF0033] to-[#0033CC] rounded-b">"สวัสดีครับ! ยินดีต้อนรับสู่ BarberShop เรามุ่งมั่นที่จะให้บริการท่านด้วยความสะดวกสบายและคุณภาพ" </p>
           </div>
-          <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100 mb-32">
+          <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100 mb-32 bg-gradient-to-r from-[#FF0033] to-[#0033CC] ">
             <div className="card-body ">
-              <p className="text-center">กรอกข้อมูลเพื่อจองคิว</p>
+              <p className="text-center text-white">กรอกข้อมูลเพื่อจองคิว</p>
               {/* <label className="">
                 <p>จองให้ผู้อื่นให้click</p>
                 <input type="checkbox" className="checkbox" onClick={ () => setCheck(!check)} />
@@ -93,7 +95,7 @@ export default function Userbooking() {
               <input type="text" placeholder="อายุผู้ตัด" name="age_range" value={input2.age_range} onChange={hdlChange2} className="input input-bordered w-full max-w-xs" style={{ marginBottom: '10px' }} />
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text">เลือกวันเวลา</span>
+                  <span className="label-text text-white">เลือกวันเวลา</span>
                 </label>
                 <input onChange={hdlChange} type="datetime-local" name="datatime" value={input.datatime} className="input input-bordered" required />
                 <label className="label">

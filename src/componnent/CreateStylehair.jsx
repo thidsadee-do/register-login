@@ -1,6 +1,6 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import Swal from 'sweetalert2';
 
 export default function CreateStylehair() {
     const [createStylehair, setCreateStylehair] = useState({
@@ -9,32 +9,35 @@ export default function CreateStylehair() {
         hairstyle_img: "",
     });
 
-    // useEffect(() => {
-    //     const getcreatestylehair = async () => {
-    //         try {
-    //             const response = await axios.get("http://localhost:8889/admin/createstylehair");
-    //             setCreateStylehair(response.data); // Adjust this based on your API response structure
-    //         } catch (error) {
-    //             console.error("Error fetching data:", error);
-    //         }
-    //     };
-    //     getcreatestylehair();
-    // }, []);
-
-    const hdlCreateStylehair = (e) => {
-        e.preventDefault()
-        // alert(จองเรียบร้อย)
-        const create = () => {
-            try {
-                axios.post('http://localhost:8889/admin/createhairstyle', createStylehair)
-                alert("เพิ่มข้อมูลเรียบร้อย")
-            } catch (error) {
-                alert(error)
-            }
+    const hdlCreateStylehair = async (e) => {
+        e.preventDefault();
+        
+        // Validation check
+        if (!createStylehair.hairstyle_name || !createStylehair.hairstyle_price || !createStylehair.hairstyle_img) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'กรุณากรอกข้อมูลให้ครบถ้วน',
+                confirmButtonColor: '#3085d6',
+            });
+            return;
         }
 
-        create()
-    }
+        try {
+            await axios.post('http://localhost:8889/admin/createhairstyle', createStylehair);
+            Swal.fire({
+                icon: 'success',
+                title: 'เพิ่มข้อมูลเรียบร้อย',
+                confirmButtonColor: '#3085d6',
+            });
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'เกิดข้อผิดพลาดในการลบ',
+                text: 'โปรดลองอีกครั้งในภายหลัง',
+                confirmButtonColor: '#3085d6',
+            });
+        }
+    };
 
     const hdlChange = (e) => {
         const { name, value } = e.target;
@@ -43,75 +46,43 @@ export default function CreateStylehair() {
             [name]: value
         }));
     };
-    
-
-    const hdlDelete = async (e, createstylehair_id) => {
-        e.stopPropagation();
-        try {
-            const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:8889/admin/createStylehair/${createstylehair_id}`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            alert('Deleted Successfully');
-            // You may want to update state or perform any other necessary actions after deletion
-        } catch (error) {
-            console.error("Error deleting data:", error);
-        }
-    };
-
-    const formatDate = (dateString) => {
-        const options = {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-        };
-        const date = new Date(dateString);
-        return date.toLocaleDateString("th-TH", options);
-    };
 
     return (
-            <form onSubmit={hdlCreateStylehair} className="flex flex-col min-w-[600px] border rounded w-5/6 mx-auto p-4 gap-6 mt-6">
-                <label className="form-control w-full">
-                    <div className="label">
-                        <span className="label-text">ชื่อทรงผม</span>
-                    </div>
-                    <input
-                        type="text"
-                        placeholder="ชื่อทรงผม"
-                        className="input input-bordered w-full"
-                        name="hairstyle_name"
-                        value={createStylehair.hairstyle_name}
-                        onChange={hdlChange}
-                    />
-                </label>
-                <label className="form-control w-full">
-                    <div className="label">
-                        <span className="label-text">ราคาทรงผม</span>
-                    </div>
-                    <input
-                        type="text"
-                        placeholder="ราคา"
-                        className="input input-bordered w-full"
-                        name="hairstyle_price"
-                        value={createStylehair.hairstyle_price}
-                        onChange={hdlChange}
-                    />
-                </label>
-                <label className="form-control w-full">
-                    <div className="label">
-                        <span className="label-text">รูปทรงผมเพิ่มเป็นลิ้ง</span>
-                    </div>
-                    <input
-                        type="text"
-                        placeholder="รูปภาพ"
-                        className="input input-bordered w-full"
-                        name="hairstyle_img"
-                        value={createStylehair.hairstyle_img}
-                        onChange={hdlChange}
-                    />
-                </label>
-                <button className="btn btn-outline btn-info">เพิ่มข้อมูล</button>
-            </form>   
+        <form onSubmit={hdlCreateStylehair} className="max-w-[600px] border rounded mx-auto p-4 gap-6 mt-6 bg-gray-100 shadow-lg">
+            <label className="flex flex-col text-gray-800">
+                <span className="text-sm font-semibold">ชื่อทรงผม</span>
+                <input
+                    type="text"
+                    placeholder="ชื่อทรงผม"
+                    className="input input-bordered mt-1"
+                    name="hairstyle_name"
+                    value={createStylehair.hairstyle_name}
+                    onChange={hdlChange}
+                />
+            </label>
+            <label className="flex flex-col text-gray-800">
+                <span className="text-sm font-semibold">ราคาทรงผม</span>
+                <input
+                    type="text"
+                    placeholder="ราคา"
+                    className="input input-bordered mt-1"
+                    name="hairstyle_price"
+                    value={createStylehair.hairstyle_price}
+                    onChange={hdlChange}
+                />
+            </label>
+            <label className="flex flex-col text-gray-800">
+                <span className="text-sm font-semibold">URL รูปทรงผม</span>
+                <input
+                    type="text"
+                    placeholder="URL รูปภาพ"
+                    className="input input-bordered mt-1"
+                    name="hairstyle_img"
+                    value={createStylehair.hairstyle_img}
+                    onChange={hdlChange}
+                />
+            </label>
+            <button type="submit" className="btn btn-info mt-4">เพิ่มข้อมูล</button>
+        </form>
     );
 }

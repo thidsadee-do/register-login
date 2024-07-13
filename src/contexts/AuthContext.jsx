@@ -7,6 +7,7 @@ function AuthContextProvider(props) {
     const [user, setUser] = useState(null)
     const [loading , setLoading] = useState(true)
     const [theme, setTheme] = useState(false);
+    const [refetch, setRefetch] = useState(true)
 
     useEffect( () => {
         const run = async () => {
@@ -38,7 +39,7 @@ function AuthContextProvider(props) {
     }
 
     return (
-        <AuthContext.Provider value = { {user, setUser, loading, logout, theme, setTheme}}>
+        <AuthContext.Provider value = { {user, setUser, loading, logout, theme, setTheme, refetch, setRefetch}}>
             {props.children}
         </AuthContext.Provider>
     )

@@ -5,7 +5,7 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     fontFamily: {
-      sans: ['Mali', 'sans-serif'],
+      sans: ['IBM Plex Sans Thai', 'sans-serif'],
     },
     extend: {},
   },

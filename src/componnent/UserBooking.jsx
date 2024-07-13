@@ -1,114 +1,282 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import userAuth from "../hooks/userAuth";
-import UserBooking from "./UserBooking";
+import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2/dist/sweetalert2.js';
+import 'sweetalert2/src/sweetalert2.scss';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { faClock } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Userbooking() {
-
   const { user } = userAuth();
   const [Userbooking, setUserbooking] = useState(null);
+  const [booking, setBookings] = useState([]);
+  const [hairId, setHairId] = useState([])
+  const [checkDate, setCheckDate] = useState("")
+  const [input, setInput] = useState({
+    datetime: '',
+    user_id: +user.user_id,
+    hairstyle_id: location.pathname.split("/")[2],
+    status: ""
+  });
+  const [refetch, setRefetch] = useState(false);
+
+  const [input2, setInput2] = useState({
+    nickname: "",
+    age_range: ""
+  });
+
+  const navigate = useNavigate();
+
+  const id = location.pathname.split("/")[2]
+
+  if (location.pathname.split("/")[2] === undefined) {
+    Swal.fire({
+      icon: "error",
+      title: "กรุณาเลือกทรงผม",
+      text: "คลิกปุ่มจองคิวเพื่อทำการนัดหมาย",
+      confirmButtonColor: "#3085d6",
+      allowOutsideClick: false,
+      preConfirm: () => navigate('/')
+    });
+  }
+
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTime, setSelectedTime] = useState("");
 
   useEffect(() => {
     const getUserBooking = async () => {
       try {
-        // const id = hairstyleID
-        const response = await axios.get(`http://localhost:8889/admin/hairstyle/`);
+        const response = await axios.get("http://localhost:8889/admin/hairstyle");
         setUserbooking(response.data.hairstyle);
-        // console.log(response.data)
       } catch (error) {
         console.error("Error fetching hairstyle:", error);
       }
     };
     getUserBooking();
-  }, []);
 
-  const hairstyleID = location.pathname.split("/")[2];
-  // console.log(hairstyleID);
+    const getBookings = async () => {
+      try {
+        const rs = await axios.get('http://localhost:8889/admin/getBook');
+        setBookings(rs.data.bookings);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getBookings();
+
+    const getHairId = async () => {
+      try {
+        const rs = await axios.get(`http://localhost:8889/admin/hairstyle/${id}`)
+        setHairId(rs.data.gethairid)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
+    getHairId();
+
+    getCheckDate();
+  }, [refetch, checkDate]);
+
+  console.log(hairId)
 
   const hdlChange = (e) => {
-    setInput((prv) => ({ ...prv, [e.target.name]: e.target.value }));
+    setInput((prevInput) => ({
+      ...prevInput,
+      [e.target.name]: e.target.value
+    }));
   };
+
+  const getCheckDate = async () => {
+    try {
+      const date = new Date(checkDate.checkDate).toISOString();
+      const rs = await axios.get(`http://localhost:8889/admin/checkBooking?checkDate=${date}`)
+      if (rs.status === 200) {
+        setBookings(rs.data.check)
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
   const hdlChange2 = (e) => {
-    setInput2((prv) => ({ ...prv, [e.target.name]: e.target.value }));
+    setInput2((prevInput2) => ({
+      ...prevInput2,
+      [e.target.name]: e.target.value
+    }));
   };
 
+  const hdlChackDate = (e) => {
+    setCheckDate((event) => ({
+      ...event,
+      [e.target.name]: e.target.value
+    }));
+  };
 
-  const [input, setInput] = useState({
-    datatime: new Date(),
-    user_id: +user.user_id,
-    hairstyle_id: hairstyleID,
-    status: ""
-  });
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    setInput((prevInput) => ({
+      ...prevInput,
+      datetime: date.toISOString().split('T')[0] + 'T' + selectedTime
+    }));
+  };
 
-  const [input2, setInput2] = useState({
-    nickname: "",
-    age_range: ""
-  })
+  const handleTimeSelect = (e) => {
+    setInput((prevInput) => ({
+      ...prevInput,
+      [e.target.name]: e.target.value
+    }));
+  };
 
   const hdlSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem("token");
 
-    const rs1 = await axios.post('http://localhost:8889/admin/guest', input2, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
+    if (!input2.nickname || !input2.age_range || !input.datetime) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'กรุณากรอกข้อมูลให้ครบถ้วน',
+        confirmButtonColor: '#3085d6',
+      });
+      return;
+    }
 
-    const guest_id = rs1.data.createGuest.guest_id
-    console.log(guest_id)
-    const data = { ...input, guest_id }
-    console.log(data)
+    try {
+      // Create guest
+      const rs1 = await axios.post("http://localhost:8889/admin/guest", input2, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const guest_id = rs1.data.createGuest.guest_id;
 
-    const rs = await axios.post("http://localhost:8889/admin/bookings", data, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    if (rs.status === 200) {
-      alert("จองสำเร็จ")
-    } else {
-      alert("ไม่สามารถจองได้ ... ")
+      // Combine input data with guest_id
+      const data = { ...input, guest_id, checkDate: checkDate.checkDate };
+
+
+
+      // Post booking
+      const rs = await axios.post("http://localhost:8889/admin/bookings", data, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      if (rs.status === 200) {
+        Swal.fire({
+          icon: 'success',
+          title: 'จองคิวสำเร็จ',
+          confirmButtonColor: '#3085d6',
+        });
+        setRefetch((prev) => !prev);
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'การจองคิวล้มเหลว',
+          confirmButtonColor: '#3085d6',
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'เกิดข้อผิดพลาดในการจองคิว',
+        text: 'คุณได้ทำการนัดหมายแล้ว',
+        confirmButtonColor: '#3085d6',
+      });
+      console.error("Error creating booking:", error);
     }
   };
 
+  const time = [
+    { value: '09:00', label: '09:00' },
+    { value: '10:00', label: '10:00' },
+    { value: '11:00', label: '11:00' },
+    { value: '13:00', label: '13:00' },
+    { value: '14:00', label: '14:00' },
+    { value: '15:00', label: '15:00' },
+    { value: '16:00', label: '16:00' },
+    { value: '17:00', label: '17:00' },
+    { value: '18:00', label: '18:00' },
+    { value: '19:00', label: '19:00' },
+    { value: '20:00', label: '20:00' },
+  ];
+
+  const bookedTimes = booking.map((booking) =>
+    new Date(booking.datetime).toLocaleTimeString('th-TH').slice(0, 5)
+  );
 
 
 
   return (
-    <form onSubmit={hdlSubmit}>
-      <div className="divider divider-warning">เลือกทรงผมและสั่งจองคิว</div>
-      <div className="hero min-h-screen bg-base-200">
-        <div className="hero-content flex-col lg:flex-row-reverse">
-          <div className="text-center lg:text-left mb-60 ">
-            <h1 className="text-5xl text-white font-bold bg-gradient-to-r from-[#FF0033] to-[#0033CC] rounded-lg">OPENING HOURS</h1>
-            <h1 className="text-4xl text-white font-bold bg-gradient-to-r from-[#0033CC] to-[#FF0033] rounded-t">Saturday: 10:00 - 19:00</h1>
-            <h1 className="text-4xl text-white font-bold bg-gradient-to-r from-[#0033CC] to-[#FF0033] ">Sunday: 10:00 - 19:00</h1> 
-            <p className="py-6 text-white bg-gradient-to-r from-[#FF0033] to-[#0033CC] rounded-b">"สวัสดีครับ! ยินดีต้อนรับสู่ BarberShop เรามุ่งมั่นที่จะให้บริการท่านด้วยความสะดวกสบายและคุณภาพ" </p>
+    <div className="flex justify-center items-center min-h-screen bg-base-200">
+      <form onSubmit={hdlSubmit} className="bg-white rounded-lg overflow-hidden shadow-xl max-w-lg w-full p-6">
+        <p className="text-center text-2xl text-black mb-4">กรอกข้อมูลเพื่อจองคิว</p>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="col-span-full">
+            <label className="block">
+              <span className="text-black">ชื่อ:</span>
+              <input type="text" placeholder="ชื่อผู้รับบริการ" name="nickname" value={input2.nickname} onChange={hdlChange2} className="input input-bordered w-full mt-1" />
+            </label>
           </div>
-          <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100 mb-32 bg-gradient-to-r from-[#FF0033] to-[#0033CC] ">
-            <div className="card-body ">
-              <p className="text-center text-white">กรอกข้อมูลเพื่อจองคิว</p>
-              {/* <label className="">
-                <p>จองให้ผู้อื่นให้click</p>
-                <input type="checkbox" className="checkbox" onClick={ () => setCheck(!check)} />
-              </label> */}
-              <input type="text" placeholder="ชื่อผู้ตัด" name="nickname" value={input2.nickname} onChange={hdlChange2} className="input input-bordered w-full max-w-xs" style={{ marginBottom: '10px' }} />
-              <input type="text" placeholder="อายุผู้ตัด" name="age_range" value={input2.age_range} onChange={hdlChange2} className="input input-bordered w-full max-w-xs" style={{ marginBottom: '10px' }} />
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text text-white">เลือกวันเวลา</span>
+          <div className="col-span-full">
+            <label className="block">
+              <span className="text-black">อายุ:</span>
+              <input type="text" placeholder="อายุผู้รับบริการ" name="age_range" value={input2.age_range} onChange={hdlChange2} className="input input-bordered w-full mt-1" />
+            </label>
+          </div>
+          <div className="col-span-full">
+            <p className="text-black mb-2">เลือกวันที่จอง:</p>
+            <input type="date" min={new Date().toISOString().split("T")[0]} placeholder="เลือกวันที่" className="input input-bordered w-full max-w-xs" name="checkDate" onChange={hdlChackDate} />
+          </div>
+          <div className="col-span-full">
+            <p className="text-black mb-2">เลือกเวลา:</p>
+            <div className="grid grid-cols-2 gap-4">
+              {time.map((el, index) => (
+                <label key={index} className={`flex justify-center items-center px-4 py-2 rounded-md border ${bookedTimes.includes(el.value) ? "opacity-50 cursor-not-allowed" : "cursor-pointer"} ${input.datetime === el.value ? "border-blue-500 bg-blue-200 font-semibold" : "border-gray-300"}`}>
+                  {console.log(input.datetime === el.value)}
+                  <input
+                    type="radio"
+                    name="datetime"
+                    value={el.value}
+                    checked={input.datetime === el.value}
+                    onChange={hdlChange}
+                    className="mr-2 hidden"
+                    disabled={bookedTimes.includes(el.value)}
+                  />
+                  <span>{el.label}</span>
                 </label>
-                <input onChange={hdlChange} type="datetime-local" name="datatime" value={input.datatime} className="input input-bordered" required />
-                <label className="label">
-                </label>
-              </div>
-              <div className="form-control mt-6">
-                <button className="btn bg-gradient-to-r from-[#fdba74] to-[#ea580c] text-white">จองคิวเลย</button>
-              </div>
+              ))}
             </div>
+          </div>
+          <div className="col-span-full flex justify-center">
+            <button type="submit" className="btn btn-accent">
+              <img src="https://vectorified.com/images/booking-icon-8.png" alt="Barbershop Icon" className="h-8 w-auto mr-2" />
+              คลิกเพื่อจอง
+            </button>
+          </div>
+        </div>
+      </form>
+      <div className="card bg-base-100 w-96 shadow-xl mr-5">
+        <figure>
+          <img src={hairId.hairstyle_img} />
+        </figure>
+        <div className="card-body">
+          <h2 className="card-title">
+            {hairId.hairstyle_name}
+            <div className="badge badge-secondary">NEW</div>
+          </h2>
+          <p className="">
+          <FontAwesomeIcon icon={faClock} /> 60 นาที
+          </p>
+
+          <div className="card-actions justify-end">
+            <div className="badge badge-outline">{hairId.hairstyle_price}บาท</div>
+            <div className="badge badge-outline">ราคา{hairId.hairstyle_name}</div>
           </div>
         </div>
       </div>
+    </div>
 
-    </form>
+
   );
 }

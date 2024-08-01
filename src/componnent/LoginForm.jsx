@@ -62,59 +62,66 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="hero min-h-screen" style={{ backgroundImage: 'url(https://wallsneedlove.com/cdn/shop/products/w0140_1s_Old-Style-Barber-Shop-Wallpaper-for-Walls-Barber-Shop_For-Interior-Walls-2.jpg?v=1604083243)' }}>
+    <div className="bg-black">
+      <marquee scrollamount="9">
+          <b className="text-1xl text-white">BarberShop Boyy : ถ. รัฐบำรุง ตำบล ธาตุนาเวง อำเภอเมืองสกลนคร สกลนคร 47000 547G+29 ตำบล ธาตุนาเวง อำเภอเมืองสกลนคร สกลนคร </b>
+        </marquee>
+    <div className="hero min-h-screen bg-cover bg-center" style={{ backgroundImage: 'url(https://i.etsystatic.com/22370788/r/il/f3073c/3409483003/il_fullxfull.3409483003_cmdq.jpg)' }}>
       <div className="container mx-auto flex justify-center items-center h-screen">
-        <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+        <div className="card glass shrink-0 w-full max-w-xl shadow-2xl bg-opacity-90">
           <form className="card-body" onSubmit={hdlSubmit}>
-            <div className="justify-center">
+            <div className="flex justify-center mb-4">
               <img
                 src="https://cdn3.iconfinder.com/data/icons/font-awesome-regular-1/512/user-512.png"
                 alt="user icon"
                 style={{ width: "55px", height: "50px" }}
               />
             </div>
-            <h1 className="text-2xl font-bold text-center text-black">
-            ล็อกอิน เข้าสู่ระบบ
+            <h1 className="text-2xl font-bold text-center text-black mb-2">
+              ล็อกอิน เข้าสู่ระบบ
             </h1>
             <h2 className="text-center text-black text-lg mb-4">
               จองคิวร้านตัดผม Barbershop
             </h2>
-            <div className="form-control">
+            <div className="mb-4">
               <label className="label">
                 <span className="label-text text-black">ชื่อผู้ใช้</span>
               </label>
-              <input placeholder="username"
+              <input
+                placeholder="username"
                 type="text"
-                className="input input-bordered"
+                className="input input-bordered w-full"
                 name="username"
                 value={input.username}
                 onChange={hdlChange}
               />
             </div>
-            <div className="form-control">
+            <div className="mb-10">
               <label className="label">
                 <span className="label-text text-black">รหัสผ่าน</span>
               </label>
-              <input placeholder="password"
+              <input
+                placeholder="password"
                 type="password"
-                className="input input-bordered"
+                className="input input-bordered w-full"
                 name="password"
                 value={input.password}
                 onChange={hdlChange}
               />
             </div>
-            <div className="form-control mt-8">
-              <button type="submit" className="btn btn-outline btn-primary text-black">
+            <div className="mb-4">
+              <button type="submit" className="btn btn-primary w-full text-white">
                 เข้าสู่ระบบ
               </button>
-              <div className="divider text-xs">หรือ</div>
-              <Link to="/register" className="btn btn-neutral-content mt-2 w-full">
+              <div className="divider text-xs my-4 text-white">หรือ</div>
+              <Link to="/register" className="btn btn-secondary w-full">
                 สมัครสมาชิก
               </Link>
             </div>
           </form>
         </div>
       </div>
+    </div>
     </div>
   );
 }

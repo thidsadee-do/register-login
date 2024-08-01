@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import userAuth from "../hooks/userAuth";
 
 export default function DataUser() {
@@ -66,10 +66,20 @@ export default function DataUser() {
         }
     };
 
+    const nonAdminUsers = users.filter((user) => user.user_role !== "ADMIN");
+
     return (
         <div className="p-4">
             <div className="divider divider-warning text-2xl font-bold mb-4">
                 ข้อมูลผู้ใช้งานทั้งหมด
+            </div>
+            <div className="flex justify-center">
+                <div className="stats shadow mb-4">
+                    <div className="stat">
+                        <div className="stat-title">จำนวนผู้ใช้งาน</div>
+                        <div className="stat-value text-3xl text-pink-500">{nonAdminUsers.length} ผู้ใช้งาน</div>
+                    </div>
+                </div>
             </div>
             <div className="overflow-x-auto">
                 <table className="min-w-full bg-white rounded-lg shadow-md">
@@ -84,27 +94,25 @@ export default function DataUser() {
                         </tr>
                     </thead>
                     <tbody>
-                        {users
-                            .filter((user) => user.user_role !== "ADMIN")
-                            .map((user) => (
-                                <tr key={user.user_id} className="hover:bg-gray-100 border-b">
-                                    <td className="py-2 px-4 border-b border-gray-300">{user.user_id}</td>
-                                    <td className="py-2 px-4 border-b border-gray-300">{user.email}</td>
-                                    <td className="py-2 px-4 border-b border-gray-300">{user.phone}</td>
-                                    <td className="py-2 px-4 border-b border-gray-300">{user.sex}</td>
-                                    <td className="py-2 px-4 border-b border-gray-300">{user.age}</td>
-                                    <td className="py-2 px-4 border-b border-gray-300">
-                                        <button
-                                            className="bg-red-500 text-white py-1 px-3 rounded-full hover:bg-red-600 transition duration-200 flex items-center"
-                                            onClick={(e) => hdlDelete(e, user.user_id)}
-                                            title="Delete User"
-                                        >
-                                            <FontAwesomeIcon icon={faTrash} className="mr-1" />
-                                            ลบ
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
+                        {nonAdminUsers.map((user) => (
+                            <tr key={user.user_id} className="hover:bg-gray-100 border-b">
+                                <td className="py-2 px-4 border-b border-gray-300">{user.user_id}</td>
+                                <td className="py-2 px-4 border-b border-gray-300">{user.email}</td>
+                                <td className="py-2 px-4 border-b border-gray-300">{user.phone}</td>
+                                <td className="py-2 px-4 border-b border-gray-300">{user.sex}</td>
+                                <td className="py-2 px-4 border-b border-gray-300">{user.age}</td>
+                                <td className="py-2 px-4 border-b border-gray-300">
+                                    <button
+                                        className="bg-red-500 text-white py-1 px-3 rounded-full hover:bg-red-600 transition duration-200 flex items-center"
+                                        onClick={(e) => hdlDelete(e, user.user_id)}
+                                        title="Delete User"
+                                    >
+                                        <FontAwesomeIcon icon={faTrash} className="mr-1" />
+                                        ลบ
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>

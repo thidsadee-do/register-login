@@ -59,11 +59,12 @@ export default function RegisterForm() {
   };
 
   return (
-    <div className='container mx-auto px-10 max-w-xl mt-10 mb-10'>
+  <div className="hero min-h-screen bg-cover bg-center" style={{ backgroundImage: 'url(https://i.etsystatic.com/22370788/r/il/f3073c/3409483003/il_fullxfull.3409483003_cmdq.jpg)' }}>
+    <div className='container mx-auto px-10 w-4/6 mt-10 mb-10'>
       <div className='flex flex-col justify-center items-center gap-4 p-6'>
-        <form className='bg-slate-400 rounded-lg p-8 shadow-lg' onSubmit={hdlSubmit}>
-          <h2 className='text-3xl font-bold mb-5 text-white'>สมัครสมาชิก</h2>
-          <div className='form-control'>
+        <form className=' rounded-lg p-8 shadow-lg w-4/6' onSubmit={hdlSubmit}>
+          <h2 className='text-3xl font-bold text-white text-center '>สมัครสมาชิก</h2>
+          <div className='form-control bg-blue-700/30'>
             <label className='label'>
               <span className='label-text text-white'>ชื่อผู้ใช้งาน</span>
             </label>
@@ -76,7 +77,7 @@ export default function RegisterForm() {
               required
             />
           </div>
-          <div className='form-control'>
+          <div className='form-control bg-blue-700/30 '>
             <label className='label'>
               <span className='label-text text-white'>รหัสผ่าน</span>
             </label>
@@ -89,7 +90,7 @@ export default function RegisterForm() {
               required
             />
           </div>
-          <div className='form-control'>
+          <div className='form-control bg-blue-700/30'>
             <label className='label'>
               <span className='label-text text-white'>ยืนยันรหัสผ่าน</span>
             </label>
@@ -102,7 +103,7 @@ export default function RegisterForm() {
               required
             />
           </div>
-          <div className='form-control'>
+          <div className='form-control bg-blue-700/30'>
             <label className='label'>
               <span className='label-text text-white'>อีเมล</span>
             </label>
@@ -115,7 +116,7 @@ export default function RegisterForm() {
               required
             />
           </div>
-          <div className='form-control'>
+          <div className='form-control bg-blue-700/30'>
             <label className='label'>
               <span className='label-text text-white'>เบอร์โทรศัพท์</span>
             </label>
@@ -128,7 +129,7 @@ export default function RegisterForm() {
               required
             />
           </div>
-          <div className='form-control'>
+          <div className='form-control bg-blue-700/30'>
             <label className='label'>
               <span className='label-text text-white'>เพศ</span>
             </label>
@@ -141,7 +142,7 @@ export default function RegisterForm() {
               required
             />
           </div>
-          <div className='form-control'>
+          <div className='form-control bg-blue-700/30'>
             <label className='label'>
               <span className='label-text text-white'>อายุ</span>
             </label>
@@ -164,6 +165,7 @@ export default function RegisterForm() {
           </div>
         </form>
       </div>
+    </div>
     </div>
   );
 }

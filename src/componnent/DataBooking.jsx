@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faCheck, faSearch, faXmark } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
 import userAuth from '../hooks/userAuth';
 import { toast } from 'react-toastify';
@@ -12,7 +12,7 @@ const api = axios.create({
 
 export default function DataBooking() {
     const [bookings, setBookings] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState('');
     const { user, refetch, setRefetch } = userAuth();
 
     useEffect(() => {
@@ -25,8 +25,6 @@ export default function DataBooking() {
                 setBookings(response.data.bookings);
             } catch (error) {
                 console.error('Error fetching bookings:', error);
-            } finally {
-                setLoading(false);
             }
         };
 
@@ -37,8 +35,8 @@ export default function DataBooking() {
         e.stopPropagation();
 
         Swal.fire({
-            title: `คุณแน่ใจหรือไม่ที่ต้องการยกเลิกคิวคุณ? ${name}`,
-            text: `โทรแจ้งลูกค้าถ้ามีการยกเลิก ${phone}`,
+            title: 'คุณแน่ใจหรือไม่ที่ต้องการยกเลิกคิวคุณ?' + " " + name,
+            text: 'โทรแจ้งลูกค้าถ้ามีการยกเลิก' + " " + phone ,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -48,14 +46,15 @@ export default function DataBooking() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await api.patch(`/booking/${Number(booking_id)}?status=2`);
+                    // const token = localStorage.getItem('token');
+                    const response = await axios.patch(`http://localhost:8889/admin/booking/${Number(booking_id)}?status=2`);
                     setBookings((prevBookings) =>
                         prevBookings.filter((booking) => booking.booking_id !== booking_id)
                     );
 
                     Swal.fire({
                         icon: 'success',
-                        title: 'ลบข้อมูลสำเร็จ',
+                        title: 'ยกเลิกสำเร็จ',
                         showConfirmButton: false,
                         timer: 1500,
                     });
@@ -75,7 +74,7 @@ export default function DataBooking() {
 
     const handleStatusUpdate = async (id) => {
         try {
-            const response = await api.patch(`/booking/${Number(id)}?status=1`);
+            const response = await axios.patch(`http://localhost:8889/admin/booking/${Number(id)}?status=1`);
             if (response.status === 200) {
                 toast.success('ยืนยันเรียนร้อยแล้ว', {
                     autoClose: 1000,
@@ -83,18 +82,47 @@ export default function DataBooking() {
                 setRefetch((prev) => !prev);
             }
         } catch (err) {
-            console.error('Error updating status:', err);
+            console.log(err);
         }
     };
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    const filteredBookings = bookings.filter(
+        (booking) =>
+            booking.user?.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            booking.guest.nickname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            booking.hairstyle.hairstyle_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            booking.status.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            booking.user?.phone.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     return (
         <div>
             <div className="divider divider-warning text-1xl font-bold my-4">
                 ข้อมูลการจองคิวลูกค้า
+            </div>
+
+            <div className="flex mb-4 justify-center">
+                <div className="relative text-gray-600 mx-10 w-3/12">
+                    <input
+                        type="search"
+                        name="search"
+                        placeholder="ค้นหา"
+                        className="bg-white w-full h-10 px-4 pr-10 rounded-full text-sm focus:outline-none border border-gray-300 shadow-md"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    <button type="submit" className="absolute right-0 -top-2 mt-3 mr-4 text-gray-600">
+                        <FontAwesomeIcon icon={faSearch} />
+                    </button>
+                </div>
+            </div>
+            <div className="flex justify-center mr-5">
+                <div className="stats shadow mb-4">
+                    <div className="stat">
+                        <div className="stat-title text-green-700">รออนุมัติ</div>
+                        <div className="stat-value text-red-600">ทั้งหมด {bookings.length} คิว</div>
+                    </div>
+                </div>
             </div>
 
             <div className="overflow-x-auto">
@@ -112,7 +140,7 @@ export default function DataBooking() {
                         </tr>
                     </thead>
                     <tbody>
-                        {bookings.map((booking) => (
+                        {filteredBookings.map((booking) => (
                             <tr key={booking.booking_id} className="bg-white">
                                 <td className="border px-4 py-2">{booking.user?.username}</td>
                                 <td className="border px-4 py-2">{new Date(booking.datetime).toLocaleString('th-TH')}</td>
@@ -131,7 +159,7 @@ export default function DataBooking() {
                                     </button>
                                     <button
                                         className="btn btn-error px-2 py-1 rounded-md text-sm flex items-center"
-                                        onClick={(e) => handleDelete(e, booking.booking_id, booking.user?.phone, booking.guest.nickname)}
+                                        onClick={(e) => handleDelete(e, booking.booking_id , booking.user?.phone , booking.guest.nickname )}
                                     >
                                         <FontAwesomeIcon icon={faXmark} className="mr-1" />
                                         ยกเลิก

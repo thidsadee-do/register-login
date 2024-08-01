@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
 
 export default function CreateStylehair() {
@@ -8,6 +9,7 @@ export default function CreateStylehair() {
         hairstyle_price: "",
         hairstyle_img: "",
     });
+    const navigate = useNavigate()
 
     const hdlCreateStylehair = async (e) => {
         e.preventDefault();
@@ -28,6 +30,7 @@ export default function CreateStylehair() {
                 icon: 'success',
                 title: 'เพิ่มข้อมูลเรียบร้อย',
                 confirmButtonColor: '#3085d6',
+                preConfirm: () => navigate('/DataHairStyle')
             });
         } catch (error) {
             Swal.fire({

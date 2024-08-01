@@ -35,7 +35,7 @@ export default function Header() {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'log out'
+      confirmButtonText: 'ออกจากระบบ'
     }).then((result) => {
       if (result.isConfirmed) {
         logout();
@@ -46,37 +46,36 @@ export default function Header() {
 
   return (
     <div className="navbar bg-[#fb923c]">
-      <div className="flex-1">
-        <a className=" text-xl text-white" href='/'>
-          <img src="https://dbdzm869oupei.cloudfront.net/img/sticker/preview/15500.png" style={{ height: '54px', borderRadius: '8px' }} />
-        </a>
-      </div>
-      <div className="flex-none">
-        <ul className="menu menu-horizontal px-1">
-          {finalNav.map(el => (
-            <li key={el.to}>
-              <Link
-                to={el.to}
-                className="text-white transition duration-300 ease-in-out hover:text-gray-900 hover:underline"
-              >
-                {el.text}
-              </Link>
-            </li>
-          ))}
-          {user?.user_id && (
-            <li>
-              <Link
-                to='#'
-                onClick={hdlLogout}
-                className="text-white transition duration-300 ease-in-out hover:text-gray-900 hover:underline"
-              >
-                ออกจากระบบ
-              </Link>
-            </li>
-          )}
-        </ul>
-      </div>
-      
-    </div>
+  <div className="flex flex-row px-0 ">
+    <a className="text-xl text-white" href="/">
+      <img src="https://dbdzm869oupei.cloudfront.net/img/sticker/preview/15500.png" style={{ height: '54px', borderRadius: '8px' }} />
+    </a>
+  </div>
+  <div className="flex flex-1 justify-center">
+    <ul className="menu menu-horizontal px-10">
+      {finalNav.map(el => (
+        <li key={el.to}>
+          <Link
+            to={el.to}
+            className="text-white transition duration-300 ease-in-out hover:text-gray-900 hover:underline text-center"
+          >
+            {el.text}
+          </Link>
+        </li>
+      ))}
+      {user?.user_id && (
+        <li>
+          <Link
+            to="#"
+            onClick={hdlLogout}
+            className=" text-white transition duration-300 ease-in-out hover:text-gray-900 hover:underline "
+          >
+            ออกจากระบบ
+          </Link>
+        </li>
+      )}
+    </ul>
+  </div>
+</div>
   );
 }

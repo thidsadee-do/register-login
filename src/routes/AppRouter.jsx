@@ -14,6 +14,8 @@ import AboutMe from "../componnent/AboutMe";
 import Datadashboard from "../componnent/Datadashboard"
 import BarberTeam from "../componnent/BarberTeam";
 import Gallery from "../componnent/Gallery";
+import Profile from "../componnent/profile";
+
 
 // import Customerhistory from "../componnent/Customerhistory";
 
@@ -61,6 +63,7 @@ const userRouter = createBrowserRouter([
       { path: "/AboutMe", element: <AboutMe /> },
       { path: "/BarberTeam", element: <BarberTeam /> },
       { path: "/Gallery", element: <Gallery /> },
+      { path: "/Profile", element: <Profile /> },
       // { path: "*", element: <p>User</p> },
     ],
   },
@@ -76,7 +79,7 @@ const adminRouter = createBrowserRouter([
       </>
     ),
     children: [
-      { index: true, element: <DataUser /> },
+      { index: true, element: <Datadashboard/> },
       { path: "/DataUser", element: <DataUser /> },
       { path: "/DataBooking", element: <DataBooking /> },
       { path: "/DataHairStyle", element: <DataHairStyle /> },

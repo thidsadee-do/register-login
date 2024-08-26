@@ -66,18 +66,32 @@ export default function DataUser() {
         }
     };
 
-    const nonAdminUsers = users.filter((user) => user.user_role !== "ADMIN");
+    const totalUsers = users.length;
+    const adminUsers = users.filter((user) => user.user_role === "ADMIN").length;
+    const nonAdminUsers = totalUsers - adminUsers;
 
     return (
         <div className="p-4">
             <div className="divider divider-warning text-2xl font-bold mb-4">
                 ข้อมูลผู้ใช้งานทั้งหมด
             </div>
-            <div className="flex justify-center">
-                <div className="stats shadow mb-4">
-                    <div className="stat">
-                        <div className="stat-title">จำนวนผู้ใช้งาน</div>
-                        <div className="stat-value text-3xl text-pink-500">{nonAdminUsers.length} ผู้ใช้งาน</div>
+            <div className="flex justify-center space-x-4 mb-4">
+                <div className="stats shadow">
+                    <div className="stat bg-gradient-to-b to-[#f9a825] from-[#fbfbfa]">
+                        <div className="stat-title text-black">จำนวนผู้ใช้งานทั้งหมด</div>
+                        <div className="stat-value text-3xl text-white">{totalUsers} ผู้ใช้งาน</div>
+                    </div>
+                </div>
+                <div className="stats shadow">
+                    <div className="stat bg-gradient-to-b to-[#f9a825] from-[#fbfbfa]">
+                        <div className="stat-title text-black">จำนวนผู้ดูแลระบบ</div>
+                        <div className="stat-value text-3xl text-white">{adminUsers} ผู้ดูแลระบบ</div>
+                    </div>
+                </div>
+                <div className="stats shadow">
+                    <div className="stat bg-gradient-to-b to-[#f9a825] from-[#fbfbfa]">
+                        <div className="stat-title text-black">จำนวนผู้ใช้งานทั่วไป</div>
+                        <div className="stat-value text-3xl text-white">{nonAdminUsers} ผู้ใช้งานทั่วไป</div>
                     </div>
                 </div>
             </div>
@@ -86,6 +100,7 @@ export default function DataUser() {
                     <thead className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-white">
                         <tr>
                             <th className="py-3 px-4 text-left border-b border-gray-300">ID</th>
+                            <th className="py-3 px-4 text-left border-b border-gray-300">ชื่อ</th>
                             <th className="py-3 px-4 text-left border-b border-gray-300">อีเมล</th>
                             <th className="py-3 px-4 text-left border-b border-gray-300">เบอร์โทรศัพท์</th>
                             <th className="py-3 px-4 text-left border-b border-gray-300">เพศ</th>
@@ -94,9 +109,10 @@ export default function DataUser() {
                         </tr>
                     </thead>
                     <tbody>
-                        {nonAdminUsers.map((user) => (
+                        {users.map((user) => (
                             <tr key={user.user_id} className="hover:bg-gray-100 border-b">
                                 <td className="py-2 px-4 border-b border-gray-300">{user.user_id}</td>
+                                <td className="py-2 px-4 border-b border-gray-300">{user.username}</td>
                                 <td className="py-2 px-4 border-b border-gray-300">{user.email}</td>
                                 <td className="py-2 px-4 border-b border-gray-300">{user.phone}</td>
                                 <td className="py-2 px-4 border-b border-gray-300">{user.sex}</td>

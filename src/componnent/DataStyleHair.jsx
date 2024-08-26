@@ -1,16 +1,16 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEdit, faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 
-export default function DataHairStyle() {
+export default function DataStyleHair() {
   const navigate = useNavigate();
   const [hairstyle, setHairStyle] = useState([]);
   const [reload, setReload] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(""); // State for the search query
-  const [selectedHairStyle, setSelectedHairStyle] = useState(""); // State for the selected hairstyle name
+  const [searchQuery, setSearchQuery] = useState(""); 
+  const [selectedHairStyle, setSelectedHairStyle] = useState(""); 
 
   useEffect(() => {
     const getHairStyle = async () => {
@@ -19,6 +19,7 @@ export default function DataHairStyle() {
     };
     getHairStyle();
   }, [reload]);
+  
 
   const hdlDelete = async (e, hairstyle_id) => {
     e.stopPropagation();
@@ -176,6 +177,9 @@ const Modal = ({ hairstyle }) => {
     hairstyle_img: hairstyle.hairstyle_img,
   });
   const [isEditing, setEditing] = useState(false);
+  const fileInput = useRef(null)
+  const [selectFile, setSelectFile] = useState(null)
+
 
   const handleEditClick = () => {
     setEditData({ ...hairstyle });
@@ -183,12 +187,34 @@ const Modal = ({ hairstyle }) => {
   };
 
   const handleSaveClick = async (e) => {
+    e.preventDefault()
     setEditing(false);
+    const file = fileInput.current.files[0];
+
+    if (!editData.hairstyle_name || !editData.hairstyle_price) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'กรุณากรอกข้อมูลให้ครบถ้วน',
+                confirmButtonColor: '#3085d6',
+            });
+            return;
+        }
+        
+        const formData = new FormData();
+        
+        Object.entries(editData).forEach(([key, value]) => {
+          formData.append(key, value);
+        });
+
+        if (file) {
+          formData.append('image', file);
+      }
+
     try {
-      e.stopPropagation();
+      // e.stopPropagation();
       const hairstyle_id = hairstyle.hairstyle_id;
       const apiUrl = `http://localhost:8889/admin/updateHairstyle/${hairstyle_id}`;
-      await axios.patch(apiUrl, editData);
+      await axios.patch(apiUrl, formData);
       location.reload();
       setEditing(false);
       document.getElementById(modalId).close();
@@ -210,6 +236,11 @@ const Modal = ({ hairstyle }) => {
     }
     document.getElementById(id).close();
   };
+
+  const hdlChangeFile = () => {
+    const file = fileInput.current.files[0]
+    setSelectFile(file)
+}
 
   return (
     <dialog id={modalId} className="modal">
@@ -243,20 +274,8 @@ const Modal = ({ hairstyle }) => {
             hairstyle.hairstyle_price
           )}
         </h3>
-        <h3 className="text-lg mb-5">
-          ภาพเป็นลิ้ง:{" "}
-          {isEditing ? (
-            <input
-              type="text"
-              name="hairstyle_img"
-              value={editData.hairstyle_img}
-              onChange={handleChange}
-              className="input input-bordered w-full"
-            />
-          ) : (
-            hairstyle.hairstyle_img
-          )}
-        </h3>
+
+        <input type="file" className="file-input file-input-bordered file-input-xs w-full max-w-xs flex col-auto" ref={fileInput} onChange={hdlChangeFile} />
 
         <div className="flex justify-end space-x-2">
           {isEditing ? (
@@ -269,6 +288,7 @@ const Modal = ({ hairstyle }) => {
             </button>
           )}
           <button
+            method="dialog"
             type="button"
             className="btn btn-error"
             onClick={() => hdlback(modalId)}
@@ -277,9 +297,6 @@ const Modal = ({ hairstyle }) => {
           </button>
         </div>
       </div>
-      <form method="dialog" className="modal-backdrop">
-        <button className="btn">Close</button>
-      </form>
     </dialog>
   );
 };
